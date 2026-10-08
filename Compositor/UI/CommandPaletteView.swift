@@ -71,8 +71,9 @@ struct CommandPaletteView: View {
 @MainActor
 final class CommandPaletteController {
     static let shared = CommandPaletteController()
-    /// Left out of the palette: the palette itself and the system menus.
-    static let skipped: Set<String> = ["Command Palette…", "Window", "Help", "Services"]
+    /// Left out of the palette: the palette itself and the system menus. Localized, as the menu titles it is
+    /// compared with are, so the match survives both languages.
+    static let skipped: Set<String> = Set(["Command Palette…", "Window", "Help", "Services"].map(loc))
 
     private(set) var panel: PalettePanel?
     private weak var window: NSWindow?

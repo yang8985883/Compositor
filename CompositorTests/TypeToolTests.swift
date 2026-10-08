@@ -17,6 +17,26 @@ struct TypeToolTests {
         session.textDraft?.style.content = "Editing"
     }
 
+    /// The unsaved-changes sheet the close and quit paths show, polled for as it animates in.
+    private func waitForSheet(on window: NSWindow) async throws -> NSWindow {
+        var sheet: NSWindow?
+        for _ in 0..<20 where sheet == nil {
+            sheet = window.attachedSheet
+            if sheet == nil { try await Task.sleep(for: .milliseconds(10)) }
+        }
+        return try #require(sheet)
+    }
+
+    /// The sheet's discard button. Its title comes from loc("Don’t Save"), so the search goes through loc too
+    /// and finds it in either language.
+    private func discardButton(in view: NSView) -> NSButton? {
+        if let button = view as? NSButton, button.title == loc("Don’t Save") { return button }
+        for child in view.subviews {
+            if let button = discardButton(in: child) { return button }
+        }
+        return nil
+    }
+
     @Test func createEditCancelAndUndo() throws {
         let session = makeSession()
         let before = session.history.undoCount
@@ -207,21 +227,9 @@ struct TypeToolTests {
         try await Task.sleep(for: .milliseconds(50))
 
         window.standardWindowButton(.closeButton)?.performClick(nil)
-        var alertWindow: NSWindow?
-        for _ in 0..<20 where alertWindow == nil {
-            alertWindow = window.attachedSheet
-            if alertWindow == nil { try await Task.sleep(for: .milliseconds(10)) }
-        }
-        let sheet = try #require(alertWindow)
-        func button(in view: NSView) -> NSButton? {
-            if let button = view as? NSButton, button.title == "Don’t Save" { return button }
-            for child in view.subviews {
-                if let button = button(in: child) { return button }
-            }
-            return nil
-        }
-        let contentView = try #require(sheet.contentView)
-        let discard = try #require(button(in: contentView))
+        let sheet = try await waitForSheet(on: window)
+        let content = try #require(sheet.contentView)
+        let discard = try #require(discardButton(in: content))
         discard.performClick(nil)
         try await Task.sleep(for: .milliseconds(50))
 
@@ -247,21 +255,9 @@ struct TypeToolTests {
         delegate.workspace.window = window
         delegate.projects.window = window
         let quitTask = Task { await delegate.workspace.confirmQuit() }
-        var alertWindow: NSWindow?
-        for _ in 0..<20 where alertWindow == nil {
-            alertWindow = window.attachedSheet
-            if alertWindow == nil { try await Task.sleep(for: .milliseconds(10)) }
-        }
-        let sheet = try #require(alertWindow)
-        func button(in view: NSView) -> NSButton? {
-            if let button = view as? NSButton, button.title == "Don’t Save" { return button }
-            for child in view.subviews {
-                if let button = button(in: child) { return button }
-            }
-            return nil
-        }
-        let contentView = try #require(sheet.contentView)
-        let discard = try #require(button(in: contentView))
+        let sheet = try await waitForSheet(on: window)
+        let content = try #require(sheet.contentView)
+        let discard = try #require(discardButton(in: content))
         discard.performClick(nil)
         #expect(await quitTask.value)
 

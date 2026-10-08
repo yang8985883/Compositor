@@ -1,0 +1,33 @@
+%@ by 10
+%@ effect
+%@ is reserved by macOS.
+%@. Double-click to reset.
+Choose the \(loc(title).lowercased()) color
+Click the original layer to set \(mode.displayName.lowercased()). Click the eyedropper again to stop.
+Close \(tab.title)
+Current: \(document.width) × \(document.height) pixels
+Current: \(draft.originalWidth) × \(draft.originalHeight) pixels
+Develop “\(url.lastPathComponent)”
+Edit \(loc(CameraRawMixerSettings.names[index])).
+Enter a whole number from 1 to \(maximum) px.
+Final dimensions must be 1–\(DocumentLimits.maxSide.formatted()) pixels per side.
+Hide %@ in the preview
+In \(Int((point.x * 255).rounded()))   Out \(Int((point.y * 255).rounded()))
+Input \(Int(points[selected].x)) · Output \(Int(points[selected].y))
+New: \(Int(draft.width.rounded())) × \(Int(draft.height.rounded())) pixels · \(bytes(Int(draft.width.rounded()), Int(draft.height.rounded()))) uncompressed
+Original \(settings.channel.displayName) histogram
+Show %@ in the preview
+Zoom in (⌘+), now \(percent). At 100% each pixel of the JPEG is one pixel of the screen, as on the canvas
+Zoom out (⌘−), now \(percent)
+\(Int((options.quality * 100).rounded()))%
+\(Int(hsb.hue.rounded())) degrees
+\(Int(rect.width)) × \(Int(rect.height)) px
+\(Int(wheel.hue.rounded()))°  \(Int(wheel.saturation.rounded()))
+\(bytes(draft.originalWidth, draft.originalHeight)) uncompressed RGBA canvas
+\(document.width) × \(document.height) px
+\(loc(title)) color
+\(loc(title)) the selection by this many pixels
+\(mode.displayName) color
+\(raster.image.width.formatted()) × \(raster.image.height.formatted()) px · sRGB
+\(rawValue.capitalized) canvas
+\(session.document?.layers.count ?? 0)

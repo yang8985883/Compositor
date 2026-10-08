@@ -23,9 +23,9 @@ struct PSDConversionSheet: View {
 
     var body: some View {
         VStack(alignment: .leading, spacing: 16) {
-            Text(request.title).font(.title2.bold())
-            Text(request.isReading ? "Reading the file to see what needs converting."
-                 : "Compositor will convert these Photoshop features. Nothing is applied until you continue.")
+            Text(loc(request.title)).font(.title2.bold())
+            Text(request.isReading ? loc("Reading the file to see what needs converting.")
+                 : loc("Compositor will convert these Photoshop features. Nothing is applied until you continue."))
                 .foregroundStyle(.secondary)
             if request.isReading {
                 HStack(spacing: 10) {
@@ -37,7 +37,7 @@ struct PSDConversionSheet: View {
                 List(request.conversions) { item in
                     VStack(alignment: .leading, spacing: 4) {
                         Text(item.layerName).font(.headline)
-                        Text(item.message)
+                        Text(loc(item.message))
                     }.padding(.vertical, 4)
                 }
                 .frame(minHeight: 180)
@@ -45,7 +45,7 @@ struct PSDConversionSheet: View {
             HStack {
                 Spacer()
                 Button("Cancel") { finish(false) }.keyboardShortcut(.cancelAction)
-                Button(request.confirmTitle) { finish(true) }.keyboardShortcut(.defaultAction)
+                Button(loc(request.confirmTitle)) { finish(true) }.keyboardShortcut(.defaultAction)
                     .disabled(request.isReading)
             }
         }

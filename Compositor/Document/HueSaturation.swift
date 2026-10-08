@@ -145,9 +145,9 @@ nonisolated enum HueSampleMode: String, CaseIterable, Sendable {
     }
     var help: String {
         switch self {
-        case .replace: "Click the image to center this range on that color"
-        case .add: "Click the image to widen this range to include that color"
-        case .remove: "Click the image to narrow this range to exclude that color"
+        case .replace: loc("Click the image to center this range on that color")
+        case .add: loc("Click the image to widen this range to include that color")
+        case .remove: loc("Click the image to narrow this range to exclude that color")
         }
     }
 }

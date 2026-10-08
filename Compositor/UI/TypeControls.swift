@@ -63,8 +63,8 @@ struct TypeControls: View {
                                     .contentShape(RoundedRectangle(cornerRadius: 4))
                             }
                             .buttonStyle(.plain)
-                            .help("Align " + alignment.rawValue.lowercased())
-                            .accessibilityLabel("Align " + alignment.rawValue.lowercased())
+                            .help(String(format: loc("Align %@"), alignment.displayName.lowercased()))
+                            .accessibilityLabel(String(format: loc("Align %@"), alignment.displayName.lowercased()))
                             .accessibilityAddTraits(selected ? .isSelected : [])
                         }
                     }
@@ -119,7 +119,7 @@ private struct TypeFontPicker: NSViewRepresentable {
         button.cell?.lineBreakMode = .byTruncatingTail
         button.cell?.usesSingleLineMode = true
         button.cell?.alignment = .left
-        button.setAccessibilityLabel("Font")
+        button.setAccessibilityLabel(loc("Font"))
         button.target = context.coordinator
         button.action = #selector(Coordinator.choose(_:))
         button.menu?.delegate = context.coordinator
@@ -141,7 +141,7 @@ private struct TypeFontPicker: NSViewRepresentable {
     }
 
     /// Selected letters in more than one face: the menu says so with an item of its own at the top, which isn't a font.
-    private static let multiple = "(Multiple)"
+    private static let multiple = loc("(Multiple)")
     private static func isMultiple(_ item: NSMenuItem?) -> Bool { item?.representedObject as? String == multiple }
     static func showMultiple(in button: NSPopUpButton) {
         if !isMultiple(button.item(at: 0)) {
@@ -245,5 +245,18 @@ private struct TypeFontPicker: NSViewRepresentable {
                   let selected = button.titleOfSelectedItem, selected != fontName.wrappedValue else { return }
             fontName.wrappedValue = selected
         }
+    }
+}
+
+/// The tool-rail icon for the Type tool: an "Aa" drawn as real text, matching the monochrome
+/// SF Symbols beside it. The `textformat` symbol it replaces is one of the letterform symbols
+/// macOS renders in the system's language — 「格式」 in Chinese — so it is drawn verbatim
+/// instead to stay "Aa" in every language.
+struct TextToolIcon: View {
+    var body: some View {
+        Text(verbatim: "Aa")
+            .font(.system(size: 14, weight: .medium))
+            .minimumScaleFactor(0.6)
+            .frame(maxWidth: .infinity, maxHeight: .infinity)
     }
 }

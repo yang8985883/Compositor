@@ -56,16 +56,22 @@ struct CommandPaletteTests {
     @Test func realMenuBarRunsItsCommands() async throws {
         let bar = try #require(NSApp.mainMenu)
         func entries() -> [CommandPaletteEntry] { CommandPaletteMenu.entries(in: bar, skipping: CommandPaletteController.skipped) }
+        // The bar's titles follow the system language, as the palette's paths built from them do, so every expected
+        // title goes through loc(_:). The top-level View menu is system-titled rather than in the app's catalog, so
+        // items in it are found by their own localized leaf title, not by a "View › …" path.
+        let pixelGrid = loc("Pixel Grid (800% and above)")
         func gridState() -> NSControl.StateValue? {
-            bar.items.first { $0.title == "View" }?.submenu?.items.first { $0.title == "Pixel Grid (800% and above)" }?.state
+            bar.items.compactMap(\.submenu).first { $0.items.contains { $0.title == pixelGrid } }?
+                .items.first { $0.title == pixelGrid }?.state
         }
         let listed = entries()
         let titles = Set(listed.map(\.title))
-        #expect(titles.contains("Filter › Gaussian Blur…") && !titles.contains("View › Command Palette…"))
+        #expect(titles.contains([loc("Filter"), loc("Gaussian Blur…")].joined(separator: " › "))
+                && !titles.contains { $0.hasSuffix(" › " + loc("Command Palette…")) })
         // The test host has no document open, so Zoom In is disabled: listed, greyed.
-        let zoom = try #require(listed.first { $0.title == "View › Zoom In" })
+        let zoom = try #require(listed.first { $0.title.hasSuffix(" › " + loc("Zoom In")) })
         #expect(!zoom.isEnabled)
-        let grid = try #require(listed.first { $0.title == "View › Pixel Grid (800% and above)" })
+        let grid = try #require(listed.first { $0.title.hasSuffix(" › " + pixelGrid) })
         let before = try #require(gridState())
         grid.perform()
         try await Task.sleep(for: .milliseconds(300))
