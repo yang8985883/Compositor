@@ -1,6 +1,8 @@
 # Compositor 中文版
 
-> 本仓库是 [robbietilton/Compositor](https://github.com/robbietilton/Compositor) 的 fork，在上游 v1.4.6 的基础上完成了完整的简体中文（zh-Hans）本地化，并附带两个小的界面改进。英文原版说明见 [README.en.md](README.en.md)。
+> **本仓库只是原仓库的简体中文汉化版**，所有核心代码、功能与工程文件格式均来自上游，本仓库不添加、不修改任何功能逻辑，后续也只跟随上游同步更新与补翻文案。仅有的两处改动都在界面显示层，均为配合中文显示所需：① 工具栏悬停时即时显示工具名称（原版需停顿约 2 秒才出现系统提示）；② 文字工具图标自绘为 "Aa"（避免 macOS 在中文环境下把该字母符号渲染成「格式」二字）。
+>
+> 本仓库是 [robbietilton/Compositor](https://github.com/robbietilton/Compositor) 的 fork，基于上游 v1.4.6 完成完整的简体中文（zh-Hans）本地化。英文原版说明见 [README.en.md](README.en.md)。
 
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
 
